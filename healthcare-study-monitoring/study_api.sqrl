@@ -11,9 +11,6 @@ _EnrichedIndicators := SELECT * FROM _ClinicalIndicator m
           JOIN _SensorPlacements FOR SYSTEM_TIME AS OF m.`timestamp` p ON m.sensorId = p.sensorId
           JOIN _Metadata  FOR SYSTEM_TIME AS OF m.`timestamp` d ON d.metadataId = p.metadataId;
 
-IndicatorAlerts := SUBSCRIBE SELECT * FROM _EnrichedIndicators
-    WHERE metric < lowRange OR metric > highRange;
-
 /*+test */
 IndicatorAlertsTest := SELECT sensorId, COUNT(metric) AS numAlerts FROM IndicatorAlerts
                        GROUP BY sensorId ORDER BY sensorId ASC;
