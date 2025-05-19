@@ -11,12 +11,6 @@ _EnrichedIndicators := SELECT * FROM _ClinicalIndicator m
           JOIN _SensorPlacements FOR SYSTEM_TIME AS OF m.`timestamp` p ON m.sensorId = p.sensorId
           JOIN _Metadata  FOR SYSTEM_TIME AS OF m.`timestamp` d ON d.metadataId = p.metadataId;
 
-/*+test */
-IndicatorAlertsTest := SELECT sensorId, COUNT(metric) AS numAlerts FROM IndicatorAlerts
-                       GROUP BY sensorId ORDER BY sensorId ASC;
-
-EXPORT IndicatorAlerts TO logger.Alert;
-
 /*+no_query */
 PatientMetricsHourly := SELECT patientId, window_time AS timeHour, metadataId, name,
                          avg(metric) as avgMetric
